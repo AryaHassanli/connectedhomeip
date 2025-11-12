@@ -871,6 +871,9 @@ def add_cluster_data_from_xml(xml: ElementTree.Element, clusters: dict[uint, Xml
             problems = problems + parser.get_problems()
 
             if cluster_id:
+                # Scene Cluster is deprecated
+                if cluster_id == 5:
+                    continue
                 clusters[cluster_id] = new
                 ids_by_name[name] = cluster_id
             else:
@@ -889,6 +892,7 @@ def check_clusters_for_unknown_commands(clusters: dict[uint, XmlCluster], proble
 
 
 class PrebuiltDataModelDirectory(Enum):
+    k1_1 = auto()
     k1_2 = auto()
     k1_3 = auto()
     k1_4 = auto()
@@ -898,6 +902,8 @@ class PrebuiltDataModelDirectory(Enum):
 
     @property
     def dirname(self):
+        if self == PrebuiltDataModelDirectory.k1_1:
+            return "1.1"
         if self == PrebuiltDataModelDirectory.k1_2:
             return "1.2"
         if self == PrebuiltDataModelDirectory.k1_3:
